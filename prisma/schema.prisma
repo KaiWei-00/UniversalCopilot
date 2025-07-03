@@ -1,0 +1,56 @@
+// Prisma schema for multi-tenant authentication system
+// Covers tenants, users, api keys, and rate limiting
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id                String    @id @default(uuid())
+  name              String
+  subdomain         String    @unique
+  contactEmail      String
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  rateLimitTier     String
+  maxRequestsPerHour Int
+  apiKeys           ApiKey[]
+  users             User[]
+  rateLimitUsages   RateLimitUsage[]
+}
+
+model ApiKey {
+  id         String   @id @default(uuid())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId   String
+  key        String   @unique
+  status     String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime?
+}
+
+model User {
+  id           String   @id @default(uuid())
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId     String
+  email        String
+  passwordHash String
+  role         String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([tenantId, email])
+}
+
+model RateLimitUsage {
+  id         String   @id @default(uuid())
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  tenantId   String
+  used       Int
+  window     DateTime
+}

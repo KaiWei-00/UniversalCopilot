@@ -1,0 +1,38 @@
+{
+  "name": "universal-copilot-a",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "prisma:migrate": "prisma migrate dev --name init",
+    "prisma:generate": "prisma generate",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@copilotkit/backend": "latest",
+    "@copilotkit/react-core": "latest",
+    "@copilotkit/react-ui": "latest",
+    "@prisma/client": "latest",
+    "bcryptjs": "latest",
+    "next": "latest",
+    "next-auth": "latest",
+    "react": "latest",
+    "react-dom": "latest"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "latest",
+    "@types/jest": "^30.0.0",
+    "@types/node": "latest",
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "autoprefixer": "latest",
+    "jest": "latest",
+    "postcss": "latest",
+    "prisma": "latest",
+    "tailwindcss": "latest",
+    "ts-jest": "^29.4.0",
+    "typescript": "^5.8.3"
+  }
+}
