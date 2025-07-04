@@ -49,15 +49,35 @@ npm run dev
 ```bash
 npm test
 ```
+Or to run all tests with verbose output:
+```bash
+npx jest --runInBand --verbose
+```
 
----
+#### Test Structure
+- Model-level tests: `tests/prisma/tenant.test.ts` (Prisma model logic, cascade delete, validation)
+- API/integration tests: `tests/api/tenant-api.test.ts` (API endpoints, error handling, permissions)
 
+> **Note:** For API endpoint tests to pass, your Next.js server must be running (`npm run dev`).
+
+#### Troubleshooting
+- If you see `fetch failed` in API tests, ensure your server is running at `http://localhost:3000`.
+- If you change the Prisma schema, always run:
+  ```bash
+  npx prisma migrate dev --name <your-migration-name>
+  npx prisma generate
+  ```
+
+#### Features
 A robust, scalable, and modern SaaS authentication platform with:
 - Multi-tenant support
 - Secure user authentication (NextAuth.js + Prisma + bcryptjs)
 - API key management
 - Per-tenant rate limiting
-- CopilotKit AI assistant UI
+- CopilotKit AI assistant UI (always rendered globally via `CopilotAssistant` in `app/layout.tsx`)
+- Comprehensive test coverage for model and API logic
+- Cascade delete and validation logic enforced and tested
+
 - Modular, tested, and well-documented codebase
 
 ## Tech Stack
