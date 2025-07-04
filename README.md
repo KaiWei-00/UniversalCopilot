@@ -168,7 +168,17 @@ Automated tests are provided for all core logic and API endpoints. Tests are wri
   - Non-admin access to protected endpoints is tested and rejected.
 
 ### How to Run Tests
-Run all tests:
+### 8. Run Authentication Test
+
+The authentication test suite (`tests/api/auth.test.ts`) now contains only a single, simple test:
+- It verifies that a valid email, password, and tenant combination can successfully authenticate via the API.
+- Negative and edge-case tests are commented out for future use and can be re-enabled as needed.
+
+Run the authentication test with:
+```bash
+npx jest tests/api/auth.test.ts
+```
+Or run all tests:
 ```bash
 npm test
 ```
