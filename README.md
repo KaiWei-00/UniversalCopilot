@@ -34,6 +34,9 @@ npm install
 ```bash
 npx prisma migrate dev --name init
 ```
+###  DATABASE REVIEW
+
+![DATABASE REVIEW](./image/readme/database_review.png)
 
 ### 5. (Optional) Seed the Database
 ```bash
