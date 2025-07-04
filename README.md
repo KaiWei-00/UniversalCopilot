@@ -45,7 +45,23 @@ npx prisma db seed
 npm run dev
 ```
 
-### 7. Run Tests
+### 7. Production Build & Run
+To create an optimized production build:
+```bash
+npm run build
+```
+To start the production server locally:
+```bash
+npm start
+```
+- This will serve the app as it would be in production (using the `.next` build output).
+- Make sure your environment variables (e.g., `DATABASE_URL`) are set for production.
+
+#### Understanding Build Output
+- `○` (Static): This route is prerendered as static content at build time.
+- `ƒ` (Dynamic): This route is server-rendered on demand (API routes, dynamic pages).
+
+### 8. Run Tests
 ```bash
 npm test
 ```

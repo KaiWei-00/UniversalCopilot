@@ -1,6 +1,10 @@
 Multi-Tenant Authentication System: Tasks
 This document outlines the detailed tasks for developing the frontend of a multi-tenant authentication system using React and Tailwind CSS.
 
+Discovered During Work
+- TODO: Delete prisma/seed.js (no longer needed, using seed.ts successfully) [2025-07-04]
+- Seed script troubleshooting [X]
+
 4. Frontend Tasks (React/Tailwind CSS)
 4.1. Core Setup
 [ ] Initialize new React project.

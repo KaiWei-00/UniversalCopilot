@@ -8,7 +8,8 @@
     "start": "next start",
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:generate": "prisma generate",
-    "test": "jest"
+    "test": "jest",
+    "seed:tsx": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@copilotkit/backend": "^0.3.0",
@@ -23,7 +24,7 @@
     "react-dom": "latest"
   },
   "prisma": {
-    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",
@@ -39,6 +40,7 @@
     "tailwindcss": "latest",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
+    "tsx": "^4.20.3",
     "typescript": "^5.8.3"
   }
 }

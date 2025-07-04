@@ -1,9 +1,6 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
-
-const prisma = new PrismaClient();
+import { prisma } from "../../../../lib/prisma";
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
@@ -15,25 +12,15 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
         tenant: { label: "Tenant Subdomain", type: "text" },
       },
-      async authorize(credentials) {
-        if (!credentials) return null;
-        const user = await prisma.user.findFirst({
-          where: {
-            email: credentials.email,
-            tenant: { subdomain: credentials.tenant }
-          },
-          include: { tenant: true }
-        });
-        if (!user) return null;
-        const valid = await bcrypt.compare(credentials.password, user.passwordHash);
-        if (!valid) return null;
-        return {
-          id: user.id,
-          email: user.email,
-          tenantId: user.tenantId,
-          role: user.role,
-          tenantSubdomain: user.tenant.subdomain
-        };
+      async authorize(credentials: { email?: string; password?: string; tenant?: string } | undefined) {
+  // Delegates user authentication to a helper for separation of concerns.
+  if (!credentials) return null;
+  const { authorizeUser } = await import("../../../../lib/auth/authorizeUser");
+  return authorizeUser({
+    email: credentials.email!,
+    password: credentials.password!,
+    tenant: credentials.tenant!
+  });
       }
     })
   ],
