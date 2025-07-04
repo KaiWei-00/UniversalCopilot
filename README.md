@@ -34,9 +34,11 @@ npm install
 ```bash
 npx prisma migrate dev --name init
 ```
-###  DATABASE REVIEW
+###  Database Review
 
-![DATABASE REVIEW](./image/readme/database_review.png)
+Below is a visual overview of the database structure used by Universal Copilot A:
+
+![Database Table Overview](./image/readme/DatabaseTable.png)
 
 ### 5. (Optional) Seed the Database
 ```bash
