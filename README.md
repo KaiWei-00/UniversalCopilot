@@ -172,6 +172,44 @@ npm run dev
 Then, in another terminal, run tests as above.
 
 ## Contributing
+## 🗂️ Application Pages & User Guide
+
+### Home Page (`/`)
+- **Purpose:** Introduction to Universal Copilot A and its features.
+- **What to do:** Use this page to learn about the app. Navigate to Register or Login using the navigation options.
+
+### Register Tenant (`/register`)
+- **Purpose:** Register a new organization/tenant.
+- **What to do:**
+  1. Fill in all required fields:
+      - Tenant Name (e.g., `acme`)
+      - Subdomain (unique, e.g., `acme`)
+      - Contact Email (e.g., `admin@acme.com`)
+      - Rate Limit Tier (choose a plan)
+      - Max Requests Per Hour (default: 1000)
+      - Admin Email (for the first admin user)
+      - Admin Password (secure password)
+  2. Click **Register**. On success, you'll be redirected to the Login page.
+
+### Login (`/login`)
+- **Purpose:** Log in as a user or admin for a specific tenant.
+- **What to do:**
+  1. Enter your **Email**, **Password**, and **Tenant Subdomain** (provided by your organization).
+  2. Click **Login**. On success, you'll be redirected to your Dashboard.
+
+### Dashboard (`/dashboard`)
+- **Purpose:** Main user landing page after login. Shows your tenant info and rate limits.
+- **What to do:**
+  - View your current usage, tenant subdomain, and rate limits.
+  - Use navigation to access more features (if available).
+
+### Admin Panel (`/admin`)
+- **Purpose:** (Admins only) Manage tenants and API keys.
+- **What to do:**
+  - View all tenants (if you are a platform admin).
+  - Select a tenant to view or manage their API keys.
+  - Generate, revoke, or manage API keys as needed.
+
 See comments and inline `# Reason:` explanations for complex logic. Follow modularity and file size rules as described in `PLANNING.md`.
 
 ---
