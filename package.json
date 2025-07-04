@@ -11,9 +11,10 @@
     "test": "jest"
   },
   "dependencies": {
-    "@copilotkit/backend": "latest",
+    "@copilotkit/backend": "^0.3.0",
     "@copilotkit/react-core": "latest",
-    "@copilotkit/react-ui": "latest",
+    "@copilotkit/react-ui": "^0.2.0",
+    "@next-auth/prisma-adapter": "^1.0.7",
     "@prisma/client": "latest",
     "bcryptjs": "latest",
     "next": "latest",
@@ -21,7 +22,11 @@
     "react": "latest",
     "react-dom": "latest"
   },
+  "prisma": {
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+  },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
     "@types/bcryptjs": "latest",
     "@types/jest": "^30.0.0",
     "@types/node": "latest",
@@ -29,10 +34,11 @@
     "@types/react-dom": "latest",
     "autoprefixer": "latest",
     "jest": "latest",
-    "postcss": "latest",
+    "postcss": "^8.5.6",
     "prisma": "latest",
     "tailwindcss": "latest",
     "ts-jest": "^29.4.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
 }

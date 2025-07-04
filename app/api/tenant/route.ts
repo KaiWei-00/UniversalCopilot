@@ -7,8 +7,9 @@ const prisma = new PrismaClient();
 export async function POST(req: NextRequest) {
   const data = await req.json();
   const { name, subdomain, contactEmail, rateLimitTier, maxRequestsPerHour, adminEmail, adminPassword } = data;
-  if (!name || !subdomain || !contactEmail || !adminEmail || !adminPassword) {
-    return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+  const { isNonEmptyString, isValidEmail } = await import('../../../lib/validation');
+  if (!name || !subdomain || !isNonEmptyString(contactEmail) || !isValidEmail(contactEmail) || !adminEmail || !adminPassword) {
+    return NextResponse.json({ error: 'Missing or invalid required fields' }, { status: 400 });
   }
   // Reason: Ensures subdomain uniqueness and atomic creation of tenant+admin
   const exists = await prisma.tenant.findUnique({ where: { subdomain } });

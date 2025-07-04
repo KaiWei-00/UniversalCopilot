@@ -2,7 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   experimental: {
-    appDir: true
+    // No experimental options needed for appDir in Next.js 15+
   }
 };
 

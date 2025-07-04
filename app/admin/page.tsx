@@ -1,9 +1,18 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import SessionProviderWrapper from "../../components/SessionProviderWrapper";
 
 export default function AdminPanel() {
-  const { data: session } = useSession();
+  return (
+    <SessionProviderWrapper>
+      <AdminPanelContent />
+    </SessionProviderWrapper>
+  );
+}
+
+function AdminPanelContent() {
+  const { data: session } = useSession() || {};
   const [tenants, setTenants] = useState<any[]>([]);
   const [selectedTenant, setSelectedTenant] = useState<any>(null);
   const [apiKeys, setApiKeys] = useState<any[]>([]);

@@ -1,9 +1,19 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import SessionProviderWrapper from "../../components/SessionProviderWrapper";
 
 export default function DashboardPage() {
-  const { data: session, status } = useSession();
+  return (
+    <SessionProviderWrapper>
+      <DashboardPageContent />
+    </SessionProviderWrapper>
+  );
+}
+
+function DashboardPageContent() {
+  const { data: session, status } = useSession() || {};
+
   const [rateLimit, setRateLimit] = useState<{ used: number; max: number } | null>(null);
 
   useEffect(() => {

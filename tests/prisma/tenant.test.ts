@@ -44,9 +44,28 @@ describe('Tenant Model', () => {
     await prisma.tenant.delete({ where: { id: t1.id } });
   });
 
-  it('should require all required fields', async () => {
+  it('should require all required fields (null)', async () => {
+    // Prisma only rejects null, not empty string
     await expect(
-      prisma.tenant.create({ data: { name: 'Missing', subdomain: 'missing', rateLimitTier: 'free', maxRequestsPerHour: 100 } })
+      prisma.tenant.create({ data: { name: 'Missing', subdomain: 'missing', contactEmail: null as any, rateLimitTier: 'free', maxRequestsPerHour: 100 } })
     ).rejects.toThrow();
+  });
+
+  it('should reject empty contactEmail at API level', async () => {
+    const res = await fetch('http://localhost:3000/api/tenant', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Missing', subdomain: 'missing', contactEmail: '', rateLimitTier: 'free', maxRequestsPerHour: 100, adminEmail: 'admin@x.com', adminPassword: 'pass' })
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it('should reject invalid email format at API level', async () => {
+    const res = await fetch('http://localhost:3000/api/tenant', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: 'Missing', subdomain: 'missing2', contactEmail: 'not-an-email', rateLimitTier: 'free', maxRequestsPerHour: 100, adminEmail: 'admin@x.com', adminPassword: 'pass' })
+    });
+    expect(res.status).toBe(400);
   });
 });
