@@ -197,6 +197,13 @@ npm run dev
 ```
 Then, in another terminal, run tests as above.
 
+
+
+###  Test Result Images
+
+![Automated Test Screenshot](./image/readme/AutomatedTest.png)
+
+
 ## Contributing
 ## 🗂️ Application Pages & User Guide
 
