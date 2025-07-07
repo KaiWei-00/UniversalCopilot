@@ -8,7 +8,11 @@ const prisma = new PrismaClient();
  * Returns the user object if valid, otherwise null.
  */
 export async function authorizeUser({ email, password, tenant }: { email: string; password: string; tenant: string }) {
-  if (!email || !password || !tenant) return null;
+  console.log("AUTH: Attempt login", { email, tenant });
+  if (!email || !password || !tenant) {
+    console.log("AUTH: Missing credentials", { email, password, tenant });
+    return null;
+  }
   const user = await prisma.user.findFirst({
     where: {
       email,
@@ -16,9 +20,16 @@ export async function authorizeUser({ email, password, tenant }: { email: string
     },
     include: { tenant: true }
   });
-  if (!user) return null;
+  if (!user) {
+    console.log("AUTH: User not found for", { email, tenant });
+    return null;
+  }
   const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) return null;
+  if (!valid) {
+    console.log("AUTH: Invalid password for", email);
+    return null;
+  }
+  console.log("AUTH: Success", email);
   return {
     id: user.id,
     email: user.email,

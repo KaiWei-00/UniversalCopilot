@@ -8,6 +8,7 @@
 - **Node.js** (v18+ recommended)
 - **npm** (v9+ recommended)
 - **PostgreSQL** (running locally or accessible via connection string)
+- **ws** and **@types/ws** (for WebSocket features)
 
 ### 1. Clone the Repository
 ```bash
@@ -16,8 +17,9 @@ cd universal-copilot-a
 ```
 
 ### 2. Install Dependencies
+> **Note:** If you encounter peer dependency errors (for example, with React 19 and CopilotKit), use `--legacy-peer-deps`:
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 ### 3. Configure Environment Variables
@@ -34,6 +36,47 @@ npm install
 ```bash
 npx prisma migrate dev --name init
 ```
+### 5. Real WebSocket Support (Node.js Server)
+
+Universal Copilot A uses a standalone Node.js WebSocket server for real-time features (e.g., chat, notifications). **Next.js API routes do NOT support WebSocket upgrades.**
+
+#### How to Run the WebSocket Server
+
+1. **Start the WebSocket server:**
+   ```bash
+   node websocket-server.js
+   ```
+   This starts a WebSocket server at `ws://localhost:3001`.
+
+2. **Frontend Connection:**
+   - The frontend (React/Next.js) connects directly to `ws://localhost:3001` for all WebSocket features.
+   - See `hooks/useChatSocket.ts` for the connection logic.
+
+3. **Do NOT use `/api/ws` API route:**
+   - `app/api/ws/route.ts` is intentionally non-functional and only exists to document this limitation.
+   - All real WebSocket logic is handled by `websocket-server.js`.
+
+#### Troubleshooting
+- Make sure `websocket-server.js` is running before using chat or real-time features.
+- If you deploy to production, you must run the WebSocket server on a persistent Node.js host (not serverless/Vercel).
+- Update the WebSocket URL in the frontend if you change the port or deploy to a different host.
+
+#### Example: Start Both Servers for Local Development
+```bash
+# In one terminal:
+node websocket-server.js
+
+# In another terminal:
+npm run dev
+```
+
+---
+
+```bash
+npm install ws --legacy-peer-deps
+npm install --save-dev @types/ws --legacy-peer-deps
+```
+
 ###  Database Review
 
 Below is a visual overview of the database structure used by Universal Copilot A:
@@ -147,6 +190,63 @@ A robust, scalable, and modern SaaS authentication platform with:
 - Admin panel for tenant and API key management
 - CopilotKit AI assistant integration
 
+---
+
+## 🗨️ Multi-Tenant Real-Time Chat System
+
+### Overview
+A robust, fully integrated chat system supporting:
+- Multi-tenant, tenant-isolated conversations
+- Threaded messages (reply to any message)
+- Real-time updates via WebSocket
+- Secure, session-based access control
+- Modular React UI components
+
+### Data Model (Prisma)
+- `Conversation`: Linked to a tenant, has many participants (users) and messages
+- `Message`: Linked to a conversation and sender, supports threading via `threadParentId`
+
+### API Endpoints
+- `POST /api/chat/start` – Create a new conversation
+- `POST /api/chat/send` – Send a message (optionally threaded)
+- `GET /api/chat/conversations` – List user’s conversations
+- `GET /api/chat/[conversationId]/messages` – Paginated message history
+- `POST /api/chat/thread/[id]/reply` – Post a threaded reply
+
+All endpoints enforce tenant isolation and session authentication.
+
+### WebSocket Infrastructure
+- Endpoint: `ws://localhost:3000/api/ws`
+- Events:
+  - `join_room`: Join a conversation (room = `tenantId:conversationId`)
+  - `new_message`: Send/receive new messages
+  - `typing`: Typing indicator
+  - `read_receipt`: Mark messages as read
+- Only authenticated users can connect and join rooms.
+
+### Frontend Components
+- `useChatSocket`: React hook for connecting, sending, and receiving chat events
+- `ChatWindow`: Main chat area, message list, input, typing indicator
+- `ConversationList`: Shows all user conversations
+- `MessageBubble`: Renders a single message
+- `ThreadedView`: Displays threaded replies for a parent message
+
+### Usage & Developer Setup
+1. **Start the backend** (`npm run dev`) and ensure database is migrated.
+2. **WebSocket**: Local development supported out of the box. For production, use a custom server.
+3. **Integrate UI**: Use components in your pages (see `/components/chat/`).
+4. **Authentication**: All chat features require a logged-in user session.
+5. **Testing**: Unit tests for all endpoints and components are in `/tests/api/chat/`.
+
+### Example Usage
+```tsx
+import { ChatWindow } from '@/components/chat/ChatWindow';
+
+<ChatWindow conversationId={myConversationId} userId={myUserId} />
+```
+
+---
+
 ### CopilotKit UI
 - Current version only exports `Button` and `Card` components from `@copilotkit/react-ui`.
 - See `/components/CopilotKitUI.tsx` for usage example.
@@ -242,6 +342,22 @@ Then, in another terminal, run tests as above.
   - Use navigation to access more features (if available).
 
 ### Admin Panel (`/admin`)
+
+---
+
+## 🛠️ Known Issues & Compatibility Notes
+
+- **React 19 and CopilotKit Peer Dependency Conflict**
+  - Some CopilotKit packages (e.g., `@copilotkit/react-ui@0.2.0`) require `react@18.2.x`, but this project uses React 19.
+  - If you see errors about peer dependency conflicts when running `npm install`, use the `--legacy-peer-deps` flag as shown above:
+    ```bash
+    npm install --legacy-peer-deps
+    npm install ws --legacy-peer-deps
+    npm install --save-dev @types/ws --legacy-peer-deps
+    ```
+  - This workaround is safe for development, but you should monitor for updates to CopilotKit that support React 19 for long-term stability.
+  - See the **Install Dependencies** and **WebSocket Support** sections above for details.
+
 - **Purpose:** (Admins only) Manage tenants and API keys.
 - **What to do:**
   - View all tenants (if you are a platform admin).

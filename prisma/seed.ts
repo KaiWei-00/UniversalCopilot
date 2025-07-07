@@ -21,11 +21,27 @@ async function main() {
   // Ensure at least one admin user for this tenant
   await prisma.user.upsert({
     where: { tenantId_email: { tenantId: tenant.id, email: 'admin@demo.com' } },
-    update: {},
+    update: {
+      passwordHash: await bcrypt.hash('password', 10),
+    },
     create: {
       email: 'admin@demo.com',
       passwordHash: await bcrypt.hash('password', 10),
       role: 'admin',
+      tenantId: tenant.id,
+    },
+  });
+
+  // Seed a second test user for chat/demo
+  await prisma.user.upsert({
+    where: { tenantId_email: { tenantId: tenant.id, email: 'user@demo.com' } },
+    update: {
+      passwordHash: await bcrypt.hash('password', 10),
+    },
+    create: {
+      email: 'user@demo.com',
+      passwordHash: await bcrypt.hash('password', 10),
+      role: 'user',
       tenantId: tenant.id,
     },
   });

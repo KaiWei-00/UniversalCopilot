@@ -1,78 +1,97 @@
-Multi-Tenant Authentication System: Tasks
-This document outlines the detailed tasks for developing the frontend of a multi-tenant authentication system using React and Tailwind CSS.
+# TASK.md - Chat System Implementation for Multi-Tenant Platform
 
-Discovered During Work
-- TODO: Delete prisma/seed.js (no longer needed, using seed.ts successfully) [2025-07-04]
-- Seed script troubleshooting [X]
+## Overview
+Implement a real-time chat system with support for:
+- API endpoints for message/conversation management
+- WebSocket-based real-time messaging
+- Persistent message storage and retrieval
+- Threaded and multi-turn conversation handling
+- Per-tenant chat isolation
 
-4. Frontend Tasks (React/Tailwind CSS)
-4.1. Core Setup
-[ ] Initialize new React project.
+---
 
-[ ] Configure Tailwind CSS.
+## Epic: Chat API and Backend Logic
 
-[ ] Set up basic routing (e.g., for Login, Register, Tenant Dashboard, Admin Panel).
+### Task 1: Chat Data Models (Database Schema)
+- [x] Design `conversations` table (id, tenantId, title, participants, timestamps)
+- [x] Design `messages` table (id, conversationId, senderId, threadParentId, content, timestamp)
+- [x] Design `threads` if needed as an abstraction (or recursive threadParentId on `messages`)
+- [x] Associate all chat objects with tenantId for multi-tenancy isolation
 
-4.2. Authentication Module
-[ ] Login Component:
+### Task 2: REST API Endpoints
+- [x] `POST /api/chat/start`: Create new conversation
+- [x] `POST /api/chat/send`: Send message (with optional threadParentId)
+- [x] `GET /api/chat/conversations`: List user's conversations
+- [x] `GET /api/chat/:conversationId/messages`: Get message history (paginated)
+- [x] `POST /api/chat/thread/:id/reply`: Post a reply in a thread
+- [x] Auth middleware to ensure tenant-bound access control
 
-[ ] UI for username/email and password.
+---
 
-[ ] Handle form submission and API calls to backend login endpoint.
+## Epic: Real-Time Messaging System
 
-[ ] Store JWT token securely (e.g., in localStorage or sessionStorage).
+### Task 3: WebSocket Infrastructure
+- [x] Integrate WebSocket server (Socket.IO, WS, or Next.js custom server)
+- [x] Define events: `join_room`, `new_message`, `typing`, `read_receipt`
+- [x] Room structure: `tenantId:conversationId`
+- [x] Emit messages to all clients in room upon send
 
-[ ] Registration Component (Tenant & User):
+### Task 4: Frontend WebSocket Client (React)
+- [x] Connect to WebSocket server
+- [x] Join conversation room on mount
+- [x] Emit message/send events from chat form
+- [x] Update UI in real time on incoming messages
 
-[ ] UI for new tenant registration (organization name, contact, email).
+---
 
-[ ] UI for user registration within a tenant (username, password, tenant ID/subdomain).
+## Epic: UI/UX Integration
 
-[ ] Handle form submission and API calls to backend registration endpoints.
+### Task 5: Chat UI Components
+- [x] ChatWindow: renders message history and form
+- [x] MessageBubble: supports main and threaded messages
+- [x] ConversationList: shows recent conversations
+- [x] ThreadedView: inline replies (Slack-style)
 
-[ ] Logout Functionality:
+### Task 6: Conversation Management
+- [ ] Create/close conversations in UI
+- [ ] Display conversation titles, timestamps, participants
+- [ ] Display message time, sender, thread count
 
-[ ] Button/link to clear session data and redirect to login.
+---
 
-4.3. Tenant Dashboard (User View)
-[ ] Display tenant-specific information.
+## Discovered During Work
+- [ ] Add CSS/styling for chat components for production-ready UI
+- [ ] Integrate chat UI into a Next.js page and connect to actual user/session context
+- [ ] Add frontend integration and unit tests for chat UI and WebSocket hook
+- [ ] Address WebSocket server deployment for production (custom Node server or alternative)
 
-[ ] Show user's current rate limit usage (if applicable).
+---
 
-[ ] Placeholder for tenant-specific data/applications.
+## Epic: AI and Multi-Turn Support (Optional)
 
-4.4. Admin Panel (API Key & Tenant Management)
-[ ] Tenant List View:
+### Task 7: Multi-Turn Chat Agent (CopilotKit/LangGraph)
+- [ ] Maintain conversation memory context
+- [ ] Respond with AI-generated replies
+- [ ] Support summarization endpoint `GET /api/chat/:conversationId/summary`
+- [ ] Enable different agents per tenant
 
-[ ] Display a list of all registered tenants.
+---
 
-[ ] Option to view tenant details.
+## Priority
 
-[ ] Tenant Details View:
+| Task                      | Priority |
+|---------------------------|----------|
+| Chat Data Models          | High     |
+| REST API Endpoints        | High     |
+| WebSocket Infrastructure  | High     |
+| Frontend Socket Client    | Medium   |
+| UI Chat Components        | Medium   |
+| Multi-Turn Chat Agent     | Low      |
 
-[ ] Display tenant information.
+---
 
-[ ] List of associated API keys.
+## Notes
+- All chat data must be scoped per tenant (strict multitenancy).
+- Use Prisma or similar ORM to link models to the `tenants` table.
+- JWT or session-based auth required to authorize chat access.
 
-[ ] API Key Management:
-
-[ ] Button to generate new API key for the tenant.
-
-[ ] Button/icon to revoke an existing API key.
-
-[ ] Button/icon to regenerate an existing API key.
-
-[ ] Display API key status (active/revoked).
-
-[ ] (Optional) UI to configure rate limits for the tenant.
-
-[ ] Rate Limit Monitoring:
-
-[ ] Display real-time or near real-time rate limit usage for each tenant (requires backend endpoint).
-
-4.5. Global Components & Styling
-[ ] Responsive navigation bar (login/logout, links to dashboard/admin).
-
-[ ] Consistent Tailwind CSS styling across all components.
-
-[ ] Error and success message display components.

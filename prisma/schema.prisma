@@ -22,6 +22,7 @@ model Tenant {
   apiKeys           ApiKey[]
   users             User[]
   rateLimitUsages   RateLimitUsage[]
+  conversations     Conversation[]
 }
 
 model ApiKey {
@@ -44,6 +45,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
+  // Chat relations
+  conversations Conversation[] @relation("ConversationParticipants")
+  messages      Message[]      @relation("UserMessages")
+
   @@unique([tenantId, email])
 }
 
@@ -54,3 +59,29 @@ model RateLimitUsage {
   used       Int
   window     DateTime
 }
+
+// --- Chat System Models ---
+model Conversation {
+  id            String      @id @default(uuid())
+  tenant        Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  tenantId      String
+  title         String
+  participants  User[]      @relation("ConversationParticipants")
+  messages      Message[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model Message {
+  id              String      @id @default(uuid())
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  conversationId  String
+  sender          User        @relation("UserMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId        String
+  threadParent    Message?    @relation("ThreadParent", fields: [threadParentId], references: [id])
+  threadParentId  String?
+  threadReplies   Message[]   @relation("ThreadParent")
+  content         String
+  createdAt       DateTime    @default(now())
+}
+

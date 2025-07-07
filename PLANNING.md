@@ -154,7 +154,38 @@ Debugging & Refactoring: Use CopilotKit for assistance in debugging issues and s
 
 Tenant-Specific AI Operations (Future): Explore how CopilotKit could enable AI-powered features within each tenant's application, potentially using tenant-specific data or configurations.
 
-7. Future Enhancements
+. Chat System Features
+
+The system will include a real-time chat feature supporting multi-turn conversation and message management, integrated per tenant.
+
+Chat API Endpoints:
+- `POST /api/chat/send`: Send a new chat message.
+- `GET /api/chat/:conversationId/messages`: Retrieve messages for a given conversation.
+- `GET /api/chat/conversations`: List user’s active and historical conversations.
+- `POST /api/chat/start`: Start a new conversation thread.
+- `POST /api/chat/thread/:id/reply`: Post a reply within a threaded message context.
+
+Real-Time Messaging:
+- Implement WebSocket (or WebSocket abstraction like Socket.IO) for real-time bi-directional communication.
+- Messages will be instantly pushed to clients subscribed to a conversation room.
+
+Message Storage and Retrieval:
+- Each message will be stored in a `messages` table/collection with metadata such as timestamp, sender, and conversation/thread ID.
+- Archived messages will be retrievable via paginated API queries.
+
+Conversation History Management:
+- Each user will have access to historical chat conversations.
+- Backend will support soft deletion and retrieval of past conversations.
+
+Multi-Turn Conversation Handling:
+- The chat system will maintain context across multiple messages in a conversation.
+- Integration with AI agents (e.g., CopilotKit or LangGraph) to support stateful, context-aware responses.
+
+Message Threading Functionality:
+- Messages can contain or reference nested threads (similar to Slack or Discord).
+- Replies within threads will be grouped visually and logically under a parent message.
+
+<!-- 8. Future Enhancements
 Multi-Factor Authentication (MFA).
 
 Role-Based Access Control (RBAC) within tenants.
@@ -166,3 +197,9 @@ Custom Domain Support for tenants.
 Advanced Rate Limiting algorithms (e.g., leaky bucket, token bucket).
 
 Subscription Management for different tenant tiers.
+
+AI Summarization of chat threads.
+
+Role-specific chat filters (e.g., support vs. internal team).
+
+Typing indicators and read receipts. -->

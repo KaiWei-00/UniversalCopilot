@@ -21,7 +21,8 @@
     "next": "latest",
     "next-auth": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "ws": "^8.18.3"
   },
   "prisma": {
     "seed": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/seed.ts"
@@ -33,10 +34,13 @@
     "@types/node": "latest",
     "@types/react": "latest",
     "@types/react-dom": "latest",
+    "@types/supertest": "^6.0.3",
+    "@types/ws": "^8.18.1",
     "autoprefixer": "latest",
     "jest": "latest",
     "postcss": "^8.5.6",
     "prisma": "latest",
+    "supertest": "^7.1.1",
     "tailwindcss": "latest",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
