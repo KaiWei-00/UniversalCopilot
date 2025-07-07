@@ -279,6 +279,47 @@ The authentication test suite (`tests/api/auth.test.ts`) now contains only a sin
 - It verifies that a valid email, password, and tenant combination can successfully authenticate via the API.
 - Negative and edge-case tests are commented out for future use and can be re-enabled as needed.
 
+---
+
+### How to Test Real-Time Chat
+
+The chat feature uses a standalone Node.js WebSocket server for real-time communication. Follow these steps to test it:
+
+1. **Start the WebSocket Server**
+   - In your project directory, run:
+     ```bash
+     node websocket-server.js
+     ```
+   - This starts the server at `ws://localhost:3001`.
+
+2. **Start the Next.js App**
+   - In a separate terminal, run:
+     ```bash
+     npm run dev
+     ```
+     or
+     ```bash
+     yarn dev
+     ```
+   - Visit `http://localhost:3000` in your browser.
+
+3. **Test the Chat UI**
+   - Locate the chat (CopilotKit) UI in your app (should be visible globally if setup is correct).
+   - Send a message in the chat window. You should see your message appear.
+   - If the WebSocket server is set up to echo or broadcast, you’ll see responses accordingly.
+
+4. **(Optional) Multi-User Test**
+   - Open the app in another browser or incognito window.
+   - Log in as a different user (if possible).
+   - Send messages from both windows to verify real-time updates.
+
+#### Troubleshooting
+- If chat does not connect, check:
+  - The WebSocket server is running and listening on port 3001.
+  - The frontend chat client is configured to use `ws://localhost:3001`.
+  - Browser console for errors.
+- Restart both servers if you make changes to the chat logic or server code.
+
 Run the authentication test with:
 ```bash
 npx jest tests/api/auth.test.ts

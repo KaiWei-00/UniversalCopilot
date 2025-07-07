@@ -5,12 +5,12 @@ import prisma from '../../../../../lib/prisma';
 
 // GET /api/chat/:conversationId/messages: Get message history (paginated)
 export async function GET(req: NextRequest, { params }: { params: { conversationId: string } }) {
+  const { conversationId } = params;
   const session = await getServerSession(authOptions);
   const user = session?.user as { id: string; tenantId: string };
   if (!user?.tenantId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  const { conversationId } = params;
   const { searchParams } = new URL(req.url);
   const page = parseInt(searchParams.get('page') || '1', 10);
   const pageSize = parseInt(searchParams.get('pageSize') || '20', 10);

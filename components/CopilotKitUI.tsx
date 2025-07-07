@@ -1,12 +1,12 @@
-import { Button, Card } from "@copilotkit/react-ui";
+"use client";
+import { CopilotChat } from "@copilotkit/react-ui";
 
-export default function CopilotKitUIDemo() {
+// This component renders the CopilotKit Assistant UI globally.
+export default function CopilotAssistant() {
+  console.log("[CopilotAssistant] Rendered");
   return (
-    <div className="fixed bottom-4 right-4 z-50">
-      <Card title="CopilotKit Card" cta="Learn More" href="https://copilotkit.ai" />
-      <div style={{ marginTop: 16 }}>
-        <Button />
-      </div>
+    <div className="fixed bottom-4 right-4 z-[9999]">
+      <CopilotChat />
     </div>
   );
 }

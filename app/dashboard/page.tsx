@@ -14,6 +14,11 @@ export default function DashboardPage() {
 function DashboardPageContent() {
   const { data: session, status } = useSession() || {};
 
+  // Debug: Log session and status
+  if (typeof window !== "undefined") {
+    console.log("SESSION:", session, status);
+  }
+
   const [rateLimit, setRateLimit] = useState<{ used: number; max: number } | null>(null);
 
   useEffect(() => {
