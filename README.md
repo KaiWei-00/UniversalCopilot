@@ -304,9 +304,43 @@ The chat feature uses a standalone Node.js WebSocket server for real-time commun
    - Visit `http://localhost:3000` in your browser.
 
 3. **Test the Chat UI**
-   - Locate the chat (CopilotKit) UI in your app (should be visible globally if setup is correct).
-   - Send a message in the chat window. You should see your message appear.
-   - If the WebSocket server is set up to echo or broadcast, you’ll see responses accordingly.
+   - Locate the chat (CopilotKit) UI in your app using the floating toggle button in the top-right corner.
+   - Click the "Open Copilot" button to open the chat window. Click "Close Copilot" to hide it again.
+   - Send a message in the chat window. You should see your message appear. If the WebSocket server is set up to echo or broadcast, you’ll see responses accordingly.
+
+---
+
+## 🤖 CopilotKit Chat Integration
+
+This project integrates [CopilotKit](https://copilotkit.ai) for an AI-powered chat assistant UI. The chat widget is available on every page via a floating button in the top-right corner.
+
+### How it Works
+- **Toggle Button:** A blue "Open Copilot" button appears in the top-right corner. Click it to open/close the chat window.
+- **Chat Window:** The chat window is styled for usability and can be resized in `components/CopilotKitUI.tsx`.
+- **Global Access:** The chat is available globally by being rendered in the root layout (`app/layout.tsx`).
+
+### Configuration
+- **Environment Variable:**
+  - You must set `NEXT_PUBLIC_COPILOTKIT_API_KEY` in your `.env` file.
+  - Example:
+    ```env
+    NEXT_PUBLIC_COPILOTKIT_API_KEY=ck_pub_xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    ```
+- **Dependencies:**
+  - `@copilotkit/react-core` and `@copilotkit/react-ui` must be installed (see `package.json`).
+
+### Customization
+- To change the chat window position, size, or toggle behavior, edit `components/CopilotKitUI.tsx`.
+- The chat window uses inline styles for easy adjustment.
+
+### Troubleshooting
+- If the chat UI does not appear:
+  - Ensure your API key is set and valid.
+  - Restart the dev server after changing `.env`.
+  - Check the browser console for errors.
+  - If the toggle button is visible but the chat is not, the issue is likely with the CopilotKit API key or network connectivity.
+
+---
 
 4. **(Optional) Multi-User Test**
    - Open the app in another browser or incognito window.

@@ -42,6 +42,7 @@
     "prisma": "latest",
     "supertest": "^7.1.1",
     "tailwindcss": "^4.1.11",
+    "tailwindcss-cli": "^0.1.2",
     "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.3",
